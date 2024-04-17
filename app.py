@@ -87,6 +87,16 @@ def delete_expense(expense_id):
 # Create app context and perform database operations within it
 with app.app_context():
     db.create_all()
+from flask import redirect, url_for, session
+
+@app.route('/logout', methods=['POST'])
+def logout():
+    # Remove the 'logged_in' and 'username' keys from the session
+    session.pop('logged_in', None)
+    session.pop('username', None)
+    # Redirect to the login page
+    return redirect(url_for('login'))
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
