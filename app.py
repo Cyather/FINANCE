@@ -1,10 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'  # Replace 'your_secret_key' with a random string
+app.secret_key = 'ROOT'  # Replace 'your_secret_key' with a random string
 
 # Dummy user database (replace with a real database)
-users = {'user1': 'password1', 'user2': 'password2'}
+users = {'Rawdog': 'BBC', 'LKreku': 'Ilovedan'}
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
