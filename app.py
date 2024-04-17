@@ -1,3 +1,53 @@
+from flask import Flask, render_template, request, redirect, url_for, session
+
+app = Flask(__name__)
+app.secret_key = 'your_secret_key'  # Replace 'your_secret_key' with a random string
+
+# Dummy user database (replace with a real database)
+users = {'user1': 'password1', 'user2': 'password2'}
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        if username in users and users[username] == password:
+            session['logged_in'] = True
+            session['username'] = username
+            return redirect(url_for('index'))  # Redirect to index page after successful login
+        else:
+            return render_template('login.html', error='Invalid username or password')
+    return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('logged_in', None)
+    session.pop('username', None)
+    return redirect(url_for('login'))  # Redirect to login page after logout
+
+@app.route('/')
+def index():
+    if 'logged_in' in session:
+        return render_template('index.html', username=session['username'])
+    else:
+        return redirect(url_for('login'))  # Redirect to login page if not logged in
+
+if __name__ == '__main__':
+      app.run(debug=True, host='0.0.0.0')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 from flask import Flask, request, render_template, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 
@@ -40,45 +90,3 @@ with app.app_context():
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
-
-
-
-from flask import Flask, render_template, request, redirect, url_for, session
-
-app = Flask(__name__)
-app.secret_key = 'your_secret_key'  # Replace 'your_secret_key' with a random string
-
-# Dummy user database (replace with a real database)
-users = {'user1': 'password1', 'user2': 'password2'}
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        if username in users and users[username] == password:
-            session['logged_in'] = True
-            session['username'] = username
-            return redirect(url_for('index'))  # Redirect to index page after successful login
-        else:
-            return render_template('login.html', error='Invalid username or password')
-    return render_template('login.html')
-
-@app.route('/logout')
-def logout():
-    session.pop('logged_in', None)
-    session.pop('username', None)
-    return redirect(url_for('login'))  # Redirect to login page after logout
-
-@app.route('/')
-def index():
-    if 'logged_in' in session:
-        return render_template('index.html', username=session['username'])
-    else:
-        return redirect(url_for('login'))  # Redirect to login page if not logged in
-
-if __name__ == '__main__':
-      app.run(debug=True, host='0.0.0.0')
-
-
-
